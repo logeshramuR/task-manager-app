@@ -14,17 +14,17 @@ function Dashboard() {
 
   const token = localStorage.getItem("token");
 
+  const API_URL =
+    "https://task-manager-app-kjwe.onrender.com/api/tasks";
+
   // GET TASKS
   const fetchTasks = async () => {
     try {
-      const res = await axios.get(
-        "http://localhost:5000/api/tasks",
-        {
-          headers: {
-            Authorization: token,
-          },
-        }
-      );
+      const res = await axios.get(API_URL, {
+        headers: {
+          Authorization: token,
+        },
+      });
 
       setTasks(res.data);
 
@@ -39,7 +39,7 @@ function Dashboard() {
 
     try {
       const res = await axios.post(
-        "http://localhost:5000/api/tasks",
+        API_URL,
         {
           text,
           priority,
@@ -73,7 +73,7 @@ function Dashboard() {
       );
 
       const res = await axios.put(
-        `http://localhost:5000/api/tasks/${id}`,
+        `${API_URL}/${id}`,
         {
           completed: !task.completed,
         },
@@ -101,7 +101,7 @@ function Dashboard() {
   const updateTask = async (id) => {
     try {
       const res = await axios.put(
-        `http://localhost:5000/api/tasks/${id}`,
+        `${API_URL}/${id}`,
         {
           text: editText,
         },
@@ -132,7 +132,7 @@ function Dashboard() {
   const deleteTask = async (id) => {
     try {
       await axios.delete(
-        `http://localhost:5000/api/tasks/${id}`,
+        `${API_URL}/${id}`,
         {
           headers: {
             Authorization: token,
