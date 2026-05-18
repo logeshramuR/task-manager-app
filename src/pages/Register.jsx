@@ -23,7 +23,7 @@ function Register() {
 
     try {
       const res = await axios.post(
-        "https://task-manager-app-kjwe.onrender.com/api/auth/register",
+        "https://task-manager-app-kjwe.onrender.com/api/auth/login",
         formData
       );
 
