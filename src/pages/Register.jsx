@@ -3,26 +3,34 @@ import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
 
 function Register() {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-
   const navigate = useNavigate();
 
-  const handleRegister = async () => {
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    password: "",
+  });
+
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleRegister = async (e) => {
+    e.preventDefault();
+
     try {
       const res = await axios.post(
         "https://task-manager-app-kjwe.onrender.com/api/auth/register",
-        {
-          name,
-          email,
-          password,
-        }
+        formData
       );
 
       alert("Registration Successful");
 
       navigate("/login");
+
     } catch (err) {
       console.log(err);
 
@@ -42,36 +50,46 @@ function Register() {
           Register
         </h1>
 
-        <input
-          type="text"
-          placeholder="Name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          className="w-full border p-3 mb-4 rounded-lg"
-        />
+        <form onSubmit={handleRegister}>
 
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          className="w-full border p-3 mb-4 rounded-lg"
-        />
+          <input
+            type="text"
+            name="name"
+            placeholder="Name"
+            value={formData.name}
+            onChange={handleChange}
+            className="w-full border p-3 mb-4 rounded-lg"
+            required
+          />
 
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          className="w-full border p-3 mb-4 rounded-lg"
-        />
+          <input
+            type="email"
+            name="email"
+            placeholder="Email"
+            value={formData.email}
+            onChange={handleChange}
+            className="w-full border p-3 mb-4 rounded-lg"
+            required
+          />
 
-        <button
-          onClick={handleRegister}
-          className="w-full bg-green-600 text-white p-3 rounded-lg"
-        >
-          Register
-        </button>
+          <input
+            type="password"
+            name="password"
+            placeholder="Password"
+            value={formData.password}
+            onChange={handleChange}
+            className="w-full border p-3 mb-4 rounded-lg"
+            required
+          />
+
+          <button
+            type="submit"
+            className="w-full bg-green-600 text-white p-3 rounded-lg"
+          >
+            Register
+          </button>
+
+        </form>
 
         <p className="text-center mt-4">
           Already have an account?{" "}
