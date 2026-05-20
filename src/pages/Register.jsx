@@ -1,128 +1,86 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { useNavigate, Link } from "react-router-dom";
 
 function Register() {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
   const navigate = useNavigate();
 
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    password: "",
-  });
-
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
+  const handleRegister = async () => {
     try {
       const res = await axios.post(
-        "https://task-manager-app-kjwe.onrender.com/api/auth/login",
-        formData
+        "https://task-manager-app-kjwe.onrender.com/api/auth/register",
+        {
+          name,
+          email,
+          password,
+        }
       );
 
-      alert(res.data.message || "Registration successful");
+      alert("Registration Successful");
 
-      navigate("/");
-    } catch (error) {
-      console.log(error);
+      navigate("/login");
+    } catch (err) {
+      console.log(err);
 
-      alert(
-        error.response?.data?.message || "Registration failed"
-      );
+      if (err.response) {
+        alert(err.response.data.message);
+      } else {
+        alert("Server Error");
+      }
     }
   };
 
   return (
-    <div
-      style={{
-        height: "100vh",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        background: "#e5e7eb",
-      }}
-    >
-      <form
-        onSubmit={handleSubmit}
-        style={{
-          background: "white",
-          padding: "40px",
-          borderRadius: "10px",
-          width: "350px",
-        }}
-      >
-        <h1
-          style={{
-            textAlign: "center",
-            marginBottom: "20px",
-          }}
-        >
+    <div className="h-screen flex items-center justify-center bg-gray-200">
+      <div className="bg-white p-8 rounded-xl shadow-lg w-96">
+
+        <h1 className="text-3xl font-bold text-center mb-6">
           Register
         </h1>
 
         <input
           type="text"
-          name="name"
           placeholder="Name"
-          value={formData.name}
-          onChange={handleChange}
-          required
-          style={{
-            width: "100%",
-            padding: "12px",
-            marginBottom: "15px",
-          }}
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          className="w-full border p-3 mb-4 rounded-lg"
         />
 
         <input
           type="email"
-          name="email"
           placeholder="Email"
-          value={formData.email}
-          onChange={handleChange}
-          required
-          style={{
-            width: "100%",
-            padding: "12px",
-            marginBottom: "15px",
-          }}
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          className="w-full border p-3 mb-4 rounded-lg"
         />
 
         <input
           type="password"
-          name="password"
           placeholder="Password"
-          value={formData.password}
-          onChange={handleChange}
-          required
-          style={{
-            width: "100%",
-            padding: "12px",
-            marginBottom: "15px",
-          }}
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          className="w-full border p-3 mb-4 rounded-lg"
         />
 
         <button
-          type="submit"
-          style={{
-            width: "100%",
-            padding: "12px",
-            background: "green",
-            color: "white",
-            border: "none",
-            cursor: "pointer",
-          }}
+          onClick={handleRegister}
+          className="w-full bg-green-600 text-white p-3 rounded-lg"
         >
           Register
         </button>
-      </form>
+
+        <p className="text-center mt-4">
+          Already have an account?{" "}
+          <Link to="/login" className="text-blue-600">
+            Login
+          </Link>
+        </p>
+
+      </div>
     </div>
   );
 }
