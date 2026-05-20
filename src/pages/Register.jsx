@@ -3,20 +3,11 @@ import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
 
 function Register() {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
   const navigate = useNavigate();
-
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    password: "",
-  });
-
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-  };
 
   const handleRegister = async (e) => {
     e.preventDefault();
@@ -24,13 +15,18 @@ function Register() {
     try {
       const res = await axios.post(
         "https://task-manager-app-kjwe.onrender.com/api/auth/register",
-        formData
+        {
+          name,
+          email,
+          password,
+        }
       );
+
+      console.log(res.data);
 
       alert("Registration Successful");
 
       navigate("/login");
-
     } catch (err) {
       console.log(err);
 
@@ -54,30 +50,27 @@ function Register() {
 
           <input
             type="text"
-            name="name"
             placeholder="Name"
-            value={formData.name}
-            onChange={handleChange}
+            value={name}
+            onChange={(e) => setName(e.target.value)}
             className="w-full border p-3 mb-4 rounded-lg"
             required
           />
 
           <input
             type="email"
-            name="email"
             placeholder="Email"
-            value={formData.email}
-            onChange={handleChange}
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             className="w-full border p-3 mb-4 rounded-lg"
             required
           />
 
           <input
             type="password"
-            name="password"
             placeholder="Password"
-            value={formData.password}
-            onChange={handleChange}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
             className="w-full border p-3 mb-4 rounded-lg"
             required
           />
