@@ -3,18 +3,20 @@ import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
 
 function Register() {
+  const navigate = useNavigate();
+
+  const API = "https://task-manager-app-kjwe.onrender.com";
+
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
-  const navigate = useNavigate();
 
   const handleRegister = async (e) => {
     e.preventDefault();
 
     try {
-      const res = await axios.post(
-        "https://task-manager-app-kjwe.onrender.com/api/auth/register",
+      const response = await axios.post(
+        `${API}/api/auth/register`,
         {
           name,
           email,
@@ -22,16 +24,17 @@ function Register() {
         }
       );
 
-      console.log(res.data);
+      console.log(response.data);
 
       alert("Registration Successful");
 
       navigate("/login");
-    } catch (err) {
-      console.log(err);
 
-      if (err.response) {
-        alert(err.response.data.message);
+    } catch (error) {
+      console.log(error);
+
+      if (error.response) {
+        alert(error.response.data.message);
       } else {
         alert("Server Error");
       }
@@ -77,7 +80,7 @@ function Register() {
 
           <button
             type="submit"
-            className="w-full bg-green-600 text-white p-3 rounded-lg"
+            className="w-full bg-green-600 text-white p-3 rounded-lg hover:bg-green-700"
           >
             Register
           </button>
