@@ -1,28 +1,43 @@
 import { useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 function Login() {
+  const navigate = useNavigate();
+
+  const API = "https://task-manager-app-kjwe.onrender.com";
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const navigate = useNavigate();
+  const handleLogin = async (e) => {
+    e.preventDefault();
 
-  const handleLogin = async () => {
     try {
-      const res = await axios.post(
-        "https://task-manager-app-kjwe.onrender.com/api/auth/login",
+      const response = await axios.post(
+        `${API}/api/auth/login`,
         {
           email,
           password,
         }
       );
 
-      localStorage.setItem("token", res.data.token);
+      console.log(response.data);
+
+      localStorage.setItem("token", response.data.token);
+
+      alert("Login Successful");
 
       navigate("/dashboard");
-    } catch (err) {
-      alert("Invalid Credentials");
+
+    } catch (error) {
+      console.log(error);
+
+      if (error.response) {
+        alert(error.response.data.message);
+      } else {
+        alert("Server Error");
+      }
     }
   };
 
@@ -34,34 +49,40 @@ function Login() {
           Login
         </h1>
 
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          className="w-full border p-3 mb-4 rounded-lg"
-        />
+        <form onSubmit={handleLogin}>
 
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          className="w-full border p-3 mb-4 rounded-lg"
-        />
+          <input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="w-full border p-3 mb-4 rounded-lg"
+            required
+          />
 
-        <button
-          onClick={handleLogin}
-          className="w-full bg-blue-600 text-white p-3 rounded-lg"
-        >
-          Login
-        </button>
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="w-full border p-3 mb-4 rounded-lg"
+            required
+          />
 
-        <p
-          onClick={() => navigate("/register")}
-          className="text-center text-blue-600 mt-4 cursor-pointer"
-        >
-          Create Account
+          <button
+            type="submit"
+            className="w-full bg-blue-600 text-white p-3 rounded-lg hover:bg-blue-700"
+          >
+            Login
+          </button>
+
+        </form>
+
+        <p className="text-center mt-4">
+          Don't have an account?{" "}
+          <Link to="/register" className="text-blue-600">
+            Register
+          </Link>
         </p>
 
       </div>
